@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using BookApi.Services;
+using LibraTrack.Services;
 using LibraTrack.Models;
 using LibraTrack.DTOs;
 
-namespace BookApi.Controllers
+namespace LibraTrack.Controllers
 {
     [Route("api/authors")]
     [ApiController]
