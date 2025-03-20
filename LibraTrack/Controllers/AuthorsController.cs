@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using LibraTrack.Services;
 using LibraTrack.Models;
-using LibraTrack.DTOs;
+using LibraTrack.Services;
 
 namespace LibraTrack.Controllers
 {
@@ -19,7 +18,7 @@ namespace LibraTrack.Controllers
         [HttpGet]
         public ActionResult<List<Author>> GetAuthors() => Ok(_authorService.GetAllAuthors());
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public ActionResult<Author> GetAuthorById(int id)
         {
             var author = _authorService.GetAuthorById(id);
@@ -27,29 +26,19 @@ namespace LibraTrack.Controllers
             return Ok(author);
         }
 
-        [HttpPost]
-        public ActionResult<Author> CreateAuthor([FromBody] AuthorDto authorDto)
+        [HttpGet("default")]
+        public ActionResult<Author> GetDefaultAuthor()
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-            var newAuthor = new Author { Name = authorDto.Name, BirthYear = authorDto.BirthYear };
-            _authorService.AddAuthor(newAuthor);
-            return CreatedAtAction(nameof(GetAuthorById), new { id = newAuthor.Id }, newAuthor);
+            var defaultAuthor = new Author { Id = 0, Name = "Default Author", BirthYear = 2000 };
+            return Ok(defaultAuthor);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateAuthor(int id, [FromBody] AuthorDto authorDto)
+        [HttpGet("search/{name:minlength(3)}")]
+        public ActionResult<List<Author>> SearchAuthors(string name)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            if (!_authorService.UpdateAuthor(id, authorDto)) return NotFound();
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult DeleteAuthor(int id)
-        {
-            if (!_authorService.DeleteAuthor(id)) return NotFound();
-            return NoContent();
+            var authors = _authorService.GetAllAuthors().Where(a => a.Name.Contains(name)).ToList();
+            if (!authors.Any()) return NotFound();
+            return Ok(authors);
         }
     }
 }
