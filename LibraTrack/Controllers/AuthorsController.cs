@@ -1,6 +1,11 @@
-﻿namespace LibraTrack.Controllers
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace LibraTrack.Controllers
 {
-    public class AuthorsController
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AuthorsController : ControllerBase
     {
     }
 }
