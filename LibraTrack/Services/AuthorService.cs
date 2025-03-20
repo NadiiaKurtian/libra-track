@@ -1,12 +1,10 @@
-﻿using LibraTrack.DTOs;
-using LibraTrack.Models;
+﻿using LibraTrack.Models;
 
 namespace LibraTrack.Services
 {
     public class AuthorService
     {
         private readonly List<Author> _authors = new();
-        private int _nextId = 1;
 
         public List<Author> GetAllAuthors() => _authors;
 
@@ -14,24 +12,24 @@ namespace LibraTrack.Services
 
         public Author AddAuthor(Author author)
         {
-            author.Id = _nextId++;
+            author.Id = _authors.Any() ? _authors.Max(a => a.Id) + 1 : 1;
             _authors.Add(author);
             return author;
         }
 
-        public bool UpdateAuthor(int id, AuthorDto authorDto)
+        public bool UpdateAuthor(int id, Author updatedAuthor)
         {
-            var author = GetAuthorById(id);
+            var author = _authors.FirstOrDefault(a => a.Id == id);
             if (author == null) return false;
 
-            author.Name = authorDto.Name;
-            author.BirthYear = authorDto.BirthYear;
+            author.Name = updatedAuthor.Name;
+            author.BirthYear = updatedAuthor.BirthYear;
             return true;
         }
 
         public bool DeleteAuthor(int id)
         {
-            var author = GetAuthorById(id);
+            var author = _authors.FirstOrDefault(a => a.Id == id);
             if (author == null) return false;
 
             _authors.Remove(author);
