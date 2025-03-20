@@ -1,0 +1,6 @@
+@LibraTrack_HostAddress = http://localhost:5130
+
+GET {{LibraTrack_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
