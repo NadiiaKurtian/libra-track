@@ -27,8 +27,10 @@ namespace LibraTrack.Services
             book.Title = bookDto.Title;
             book.Year = bookDto.Year;
             book.AuthorId = bookDto.AuthorId;
+
             return true;
         }
+
 
         public bool DeleteBook(int id)
         {
