@@ -2,28 +2,42 @@ using LibraTrack.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddSingleton<AuthorService>();
 builder.Services.AddSingleton<BookService>();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
 app.MapControllers();
+
+app.MapGet("/greet", async context =>
+{
+    await context.Response.WriteAsync("Welcome to LibraTrack API!");
+});
+
+app.MapGet("/author/{name}", async context =>
+{
+    var name = context.Request.RouteValues["name"]?.ToString();
+    await context.Response.WriteAsync($"Author: {name}");
+});
+
+app.MapGet("/welcome/{name?}", async context =>
+{
+    var name = context.Request.RouteValues["name"]?.ToString() ?? "Guest";
+    await context.Response.WriteAsync($"Welcome, {name}!");
+});
+
+app.MapGet("/api/book/{author}/{year:int}", async context =>
+{
+    var author = context.Request.RouteValues["author"]?.ToString();
+    var year = context.Request.RouteValues["year"]?.ToString();
+    await context.Response.WriteAsync($"Books by {author} published in {year}");
+});
+
+app.MapGet("/books/{title:minlength(3)}", async context =>
+{
+    var title = context.Request.RouteValues["title"]?.ToString();
+    await context.Response.WriteAsync($"Book: {title}");
+});
 
 app.Run();
