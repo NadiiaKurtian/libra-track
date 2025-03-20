@@ -1,8 +1,7 @@
-﻿using BookApi.Models;
-using LibraTrack.DTOs;
+﻿using LibraTrack.DTOs;
 using LibraTrack.Models;
 
-namespace BookApi.Services
+namespace LibraTrack.Services
 {
     public class BookService
     {
