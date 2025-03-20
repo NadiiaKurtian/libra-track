@@ -40,5 +40,28 @@ namespace LibraTrack.Controllers
             if (!authors.Any()) return NotFound();
             return Ok(authors);
         }
+
+        [HttpPost]
+        public ActionResult<Author> CreateAuthor([FromBody] Author newAuthor)
+        {
+            var createdAuthor = _authorService.AddAuthor(newAuthor);
+            return CreatedAtAction(nameof(GetAuthorById), new { id = createdAuthor.Id }, createdAuthor);
+        }
+
+        [HttpPut("{id:int}")]
+        public ActionResult UpdateAuthor(int id, [FromBody] Author updatedAuthor)
+        {
+            var success = _authorService.UpdateAuthor(id, updatedAuthor);
+            if (!success) return NotFound();
+            return NoContent();
+        }
+
+        [HttpDelete("{id:int}")]
+        public ActionResult DeleteAuthor(int id)
+        {
+            var success = _authorService.DeleteAuthor(id);
+            if (!success) return NotFound();
+            return NoContent();
+        }
     }
 }
